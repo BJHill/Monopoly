@@ -34,7 +34,7 @@ namespace Monopoly
 		/**
 		Register a new player with the game
 		*/
-		void registerPlayer(const char* name);
+		void registerPlayer(const char* name, int type);
 
 		/**
 		Start the game
