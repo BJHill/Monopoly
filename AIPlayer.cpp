@@ -56,6 +56,11 @@ void Monopoly::AIPlayer::buyHouses()
 	}
 }
 
+void Monopoly::AIPlayer::cardDrawn(int player, int type, int card)
+{
+
+}
+
 double Monopoly::AIPlayer::computeUtility(int money, const std::vector<Property*>& property)
 {
 	return 0;
@@ -92,6 +97,11 @@ void Monopoly::AIPlayer::raiseFunds(int player, int amount)
 int Monopoly::AIPlayer::mortgageNextProperty()
 {
 	return 0;
+}
+
+void Monopoly::AIPlayer::playerRolled(int player, int die1, int die2)
+{
+
 }
 
 bool Monopoly::AIPlayer::hasUnmortgaged()

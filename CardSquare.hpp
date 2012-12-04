@@ -16,6 +16,10 @@ namespace Monopoly
     virtual ~CardSquare();
 
     virtual void action(int player, int roll);
+
+	private:
+
+		int m_type;
   };
 };
 

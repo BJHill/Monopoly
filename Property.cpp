@@ -16,6 +16,8 @@ Monopoly::Property::Property(Game* game, int index, int type, int group, int siz
 	m_owned = false;
 	m_owner = NULL;
 
+	m_mortgaged = false;
+
 	m_propertyType = type;
 
 	for (int i = 0; i < 6; i++)
@@ -41,7 +43,7 @@ void Monopoly::Property::action(int player, int roll)
 		// If a player has enough money offer the chance to buy
 		if (m_game->getPlayer(player)->get_money() > m_buyPrice)
 		{
-			bool buy = m_game->offerPurchase(m_index);
+			bool buy = m_game->notifyOfferPurchase(m_index);
 
 			if (buy)
 			{

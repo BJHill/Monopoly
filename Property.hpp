@@ -53,6 +53,11 @@ namespace Monopoly
 		int getType();
 
 		/**
+		Mortgage this property
+		*/
+		void mortgageProperty();
+
+		/**
 		Set the rental value of this Property.
 		*/
 		void setRent(int rent, int house1, int house2, int house3, int house4, int hotel);
@@ -66,6 +71,11 @@ namespace Monopoly
 		Sell a house on this property
 		*/
 		void sellHouse();
+
+		/**
+		Unmortgage this property.
+		*/
+		void unmortgageProperty();
 
   private:
 
@@ -113,6 +123,8 @@ namespace Monopoly
 		
 		// Number of built houses
 		int m_houses;
+
+		bool m_mortgaged;
   };
 };
 

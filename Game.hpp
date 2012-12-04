@@ -29,6 +29,7 @@ namespace Monopoly
 		*/
 		~Game();
 
+
 		/**
 		Register the UI listener for callbacks.
 		*/
@@ -43,6 +44,8 @@ namespace Monopoly
 		Start the game
 		*/
 		void startGame();
+
+
        
     /**
     Get the chance card CardDeck.
@@ -68,6 +71,8 @@ namespace Monopoly
 		Get the Property data for a property in the game.
 		*/
 		Property* getProperty(int index);
+
+
     
 		/**
 		Buy an amount of houses on a property.
@@ -93,21 +98,31 @@ namespace Monopoly
 		Roll for the current players turn
 		*/
 		void rollTurn();
+		
+		/**
+		Card drawn
+		*/
+		void notifyCardDrawn(int type, int card);
 
 		/**
 		Propose trade.
 		*/
-		bool proposeTrade(const Trade& trade, int index);
+		bool notifyProposeTrade(const Trade& trade, int player);
 
     /**
     Prompt a player to raise an amount of money to avoid bankruptcy.
     */
-    void raiseFunds(int player, int amount);
+    void notifyRaiseFunds(int amount);
 
     /**
     Offer a player a chance to buy a property.
     */
-    bool offerPurchase(int index);
+    bool notifyOfferPurchase(int index);
+
+
+
+
+
 
 	private:
 
@@ -120,6 +135,28 @@ namespace Monopoly
     Test if the game is over, i.e there is only one non-bankrupt player.
     */
 		bool gameOver();
+
+		/**
+
+		*/
+		void notifyEndTurn();
+
+		/**
+
+		*/
+		void notifyStartTurn();
+
+
+		/**
+
+		*/
+		void notifyRoll(int die1, int die2);
+
+		/**
+		Update the turn for the next player
+		*/
+		void updateTurn(bool inJail, bool rolledDouble); 
+		
 
     // Current player turn
 		int m_turn;

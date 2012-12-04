@@ -17,6 +17,9 @@ Monopoly::Game::Game()
   m_doubles = 0;
 	m_turn = 0;
 
+  m_chanceCard = 0;
+  m_communuityCard = 0;
+
   constructBoard();
 }
 
@@ -164,7 +167,7 @@ void Monopoly::Game::registerPlayer(const char* name, int type)
 	}
 }
 
-bool Monopoly::Game::offerPurchase(int index)
+bool Monopoly::Game::notifyOfferPurchase(int index)
 {
 	if (m_aiPlayers.find(m_turn) != m_aiPlayers.end())
 	{
@@ -261,55 +264,80 @@ void Monopoly::Game::rollTurn()
   int currentPlayer = m_turn;
   int currentLocation = player->get_position();
 
+	bool inJail = player->in_jail();
+		
+	notifyRoll(die1, die2);
+	
   if (die1 == die2 && m_doubles == 2)
   {
     player->go_to_jail();
     m_doubles = 0;
   }
-
-  // If the player is in jail  
-	if (player->in_jail())
-	{
-		if (die1 == die2)
+	else
+	{	
+		// If the player is in jail  
+		if (inJail)
 		{
-			player->free_from_jail();
-			player->move(die1 + die2);
-		}
-		else
-		{
-			if (player->get_rounds_in_jail() == 2)
+			if (die1 == die2)
 			{
-				player->pay_money(50);
-        player->free_from_jail();
+				player->free_from_jail();
 				player->move(die1 + die2);
 			}
 			else
 			{
-				player->increase_round_in_jail();
+				if (player->get_rounds_in_jail() == 2)
+				{
+					player->pay_money(50);
+					player->free_from_jail();
+					player->move(die1 + die2);
+				}
+				else
+				{
+					player->increase_round_in_jail();
+				}
 			}
 		}
-		
-    // Always go to next players turn
-		m_turn = (m_turn + 1) % m_players.size();
+		else
+		{
+			player->move(die1+die2);
+		}
 	}
-	else
-	{
-		player->move(die1+die2);
-
-    // Chance to roll a double and stay on this players turn
-		if (die1 != die2)		
-    {
-			m_turn = (m_turn + 1) % m_players.size();
-      m_doubles = 0;
-    }
-    else
-      m_doubles++;
-	}
-  
+  	
   // Call action for square landed on
   m_board[player->get_position()]->action(currentPlayer, die1 + die2);
 		
   // Notify end of turn
+	notifyEndTurn();
+	
+	updateTurn(inJail || player->in_jail(), die1 == die2);
+}
+
+void Monopoly::Game::updateTurn(bool inJail, bool rolledDouble)
+{
+	if (inJail || !rolledDouble)
+	{
+		m_turn = (m_turn + 1) % m_players.size();
+	}
+	else
+	{
+		m_doubles++;
+	}
+}
+	
+void Monopoly::Game::notifyCardDrawn(int type, int card)
+{
+	if (m_aiPlayers.find(m_turn) != m_aiPlayers.end())
+	{
+		m_aiPlayers[m_turn]->cardDrawn(m_turn, type, card);
+	}
+	else
+	{
+    m_uiListener->cardDrawn(m_turn, type, card);
+	}
+}
+
+void Monopoly::Game::notifyEndTurn()
+{
 	if (m_aiPlayers.find(m_turn) != m_aiPlayers.end())
 	{
 		m_aiPlayers[m_turn]->turnEnd(m_turn);
@@ -319,8 +347,32 @@ void Monopoly::Game::rollTurn()
 		m_uiListener->turnEnd(m_turn);
 	}
 }
-	
-bool Monopoly::Game::proposeTrade(const Trade& trade, int player)
+
+void Monopoly::Game::notifyStartTurn()
+{
+	if (m_aiPlayers.find(m_turn) != m_aiPlayers.end())
+	{
+		m_aiPlayers[m_turn]->turnStart(m_turn);
+	}
+	else
+	{
+		m_uiListener->turnStart(m_turn);
+	}
+}
+
+void Monopoly::Game::notifyRoll(int die1, int die2)
+{
+	if (m_aiPlayers.find(m_turn) != m_aiPlayers.end())
+	{
+		m_aiPlayers[m_turn]->playerRolled(m_turn, die1, die2);
+	}
+	else
+	{
+		m_uiListener->playerRolled(m_turn, die1, die2);
+	}
+}
+
+bool Monopoly::Game::notifyProposeTrade(const Trade& trade, int player)
 {
 	bool accepts = false;
 
@@ -341,14 +393,14 @@ bool Monopoly::Game::proposeTrade(const Trade& trade, int player)
   return accepts;
 }
 
-void Monopoly::Game::raiseFunds(int player, int amount)
+void Monopoly::Game::notifyRaiseFunds(int amount)
 {
-	if (m_aiPlayers.find(player) != m_aiPlayers.end())
+	if (m_aiPlayers.find(m_turn) != m_aiPlayers.end())
 	{
-    m_aiPlayers[player]->raiseFunds(player, amount);
+    m_aiPlayers[m_turn]->raiseFunds(m_turn, amount);
 	}
 	else
 	{
-    m_uiListener->raiseFunds(player, amount);
+    m_uiListener->raiseFunds(m_turn, amount);
 	}
 }

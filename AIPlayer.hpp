@@ -29,11 +29,13 @@ namespace Monopoly
     /**
     Implement GameListener methods.
     */
-    void turnStart(int index);
-    void turnEnd(int index);
-    bool acceptTrade(int player, const Trade& trade);
-    bool buyProperty(int player, int property);
-    void raiseFunds(int player, int amount);
+		virtual bool acceptTrade(int player, const Trade& trade);
+    virtual bool buyProperty(int player, int property);  
+		virtual void cardDrawn(int player, int type, int card);
+		virtual void playerRolled(int player, int die1, int die2);
+    virtual void raiseFunds(int player, int amount);
+    virtual void turnEnd(int player);
+    virtual void turnStart(int player);
 
   private:
 

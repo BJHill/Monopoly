@@ -19,9 +19,7 @@ struct Printer : public Monopoly::GameListener
 		
 		printf("Press zero to roll:");
 		scanf("%d", &in);
-
-
-
+		
 		game->rollTurn();
 
 		int a = game->getPlayer(index)->get_position();
@@ -33,6 +31,11 @@ struct Printer : public Monopoly::GameListener
     printf("Player %d turn end, position %d, money %d\n", index,  game->getPlayer(index)->get_position(), game->getPlayer(index)->get_money());
 	}
 
+	virtual void playerRolled(int player, int die1, int die2) 
+	{
+		printf("Player %d rolled, die1=%d, die2=%d, total=%d\n", player,  die1, die2, die1+die2);
+	}
+ 
 	virtual bool acceptTrade(int player, const Monopoly::Trade& trade){return false;}
 	virtual bool buyProperty(int player, int index)
 	{
@@ -51,6 +54,11 @@ struct Printer : public Monopoly::GameListener
 		}
 
 		return false;
+	}
+
+	virtual void cardDrawn(int player, int type, int card) 
+	{
+		printf("Card drawn for player %d, type %d, card %d\n", player, type, card);
 	}
 
 	virtual void raiseFunds(int player, int amount) {}

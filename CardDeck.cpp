@@ -1,6 +1,10 @@
 #include "CardDeck.hpp"
 #include "Player.hpp"
 
+#include <ctime>
+#include <string>
+#include <iostream>
+
 Monopoly::CardDeck::CardDeck(Game* game, const char *file)
 {
    theGame=game;
@@ -84,7 +88,8 @@ void Monopoly::CardDeck::shuffle()
   srand(time(NULL));
   
   int cardsLeft= numberCards;			// number of cards which have not been put into the array
-  int randomNumber, tempCards[numberCards];
+  int randomNumber;
+	int* tempCards = new int[numberCards];
   
   for(int i=0; i<cardsLeft; i++)			//saves all cards in a temporary list
   {
@@ -98,6 +103,8 @@ void Monopoly::CardDeck::shuffle()
     cardsLeft--;				// decreases the cardsLeft, 
     deleteCard(randomNumber,cardsLeft, tempCards); //selected card is being deleted from the temp list, so that it can't be chosen again
   }
+	
+	delete [] tempCards;
 }
 
 /* deletes card from a list by moveing cards following it up the list and changes the last element to be 0. 
