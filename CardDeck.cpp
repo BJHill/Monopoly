@@ -232,7 +232,6 @@ void Monopoly::CardDeck::doAction(Card card, int player)
     case 6:
       std::cout<<currentPlayer->get_name()<<" has jail cards "<<currentPlayer->get_number_of_jail_cards()<<std::endl;
       std::cout<<"Get out of jail free"<<std::endl;
-      currentPlayer->keep_card(card.index);
       std::cout<<currentPlayer->get_name()<<" has jail cards "<<currentPlayer->get_number_of_jail_cards()<<std::endl;
       break; 
       

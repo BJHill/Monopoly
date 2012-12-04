@@ -52,7 +52,7 @@ void Monopoly::Game::constructBoard()
   m_board.push_back(new Property(this,1,1,1,2,"Old Kent Road"));
   m_board.push_back(new CardSquare(this, 1, "Community Chest"));
   m_board.push_back(new Property(this,3,1,1,2,"Whitechappel Road"));
-  m_board.push_back(new CardSquare(this, 200, "Income Tax"));
+  m_board.push_back(new Square(this, 200, "Income Tax"));
   m_board.push_back(new Property(this,5,1,2,4,"Kings Cross Station"));
   m_board.push_back(new Property(this,6,1,3,3,"The Angel Islington"));
   m_board.push_back(new CardSquare(this, 2, "Chance"));
@@ -86,7 +86,7 @@ void Monopoly::Game::constructBoard()
   m_board.push_back(new Property(this,35,1,2,4,"Liverpool St Station"));
   m_board.push_back(new CardSquare(this, 2, "Chance"));
   m_board.push_back(new Property(this,37,1,10,2,"Park Lane"));
-  m_board.push_back(new CardSquare(this, 100, "Super Tax"));
+  m_board.push_back(new Square(this, 100, "Super Tax"));
   m_board.push_back(new Property(this,39,1,10,2,"Mayfair"));
 
 	((Property*)m_board[1])->setPrice(60,50);
@@ -252,6 +252,20 @@ void Monopoly::Game::mortgageProperty(int index)
 void Monopoly::Game::unmortgageProperty(int index)
 {
   // TODO implement
+}
+
+void Monopoly::Game::useGetOutOfJail()
+{
+	int deck = m_players[m_turn]->use_jail_card(0);
+
+	if (deck == 1)
+	{
+		m_chanceCard->replaceCard();
+	}
+	else
+	{
+		m_communuityCard->replaceCard();
+	}
 }
 
 void Monopoly::Game::rollTurn()

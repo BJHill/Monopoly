@@ -88,6 +88,9 @@ void init_players(Monopoly::Game& game, int numPlayers, char *argv[])
 {    
   for(int i=0; i<numPlayers; i++)
   {
-		game.registerPlayer(argv[i+1], 0);
+		if (i > 0)
+			game.registerPlayer(argv[i+1], 1);
+		else
+			game.registerPlayer(argv[i+1], 0);
   }
 }

@@ -31,99 +31,41 @@ namespace Monopoly
 
 
 		/**
-		Register the UI listener for callbacks.
+		Game setup fucntions
 		*/
 		void registerUIListener(GameListener* listener);
-
-		/**
-		Register a new player with the game
-		*/
 		void registerPlayer(const char* name, int type);
-
-		/**
-		Start the game
-		*/
 		void startGame();
-
-
-       
+				       
     /**
-    Get the chance card CardDeck.
+    STate getter functions
     */
     CardDeck* getChanceCards();
-
-    /**
-    Get the community card CardDeck.
-    */
     CardDeck* getCommunityCards();
 
-		/**
-		Get the number of players in the game
-		*/
 		int getNumberPlayers() const;
-
-		/**
-		Get the Player data for a player in the game.
-		*/
-		Player* getPlayer(int index);
-
-		/**
-		Get the Property data for a property in the game.
-		*/
-		Property* getProperty(int index);
-
-
-    
-		/**
-		Buy an amount of houses on a property.
-		*/
-		void buyHouses(int index, int amount);
-
-		/**
-		Sell an amount of houses on a property.
-		*/
-		void sellHouses(int index, int amount);
-
-		/**
-		Mortgage a property.
-		*/
-		void mortgageProperty(int index);
-
-		/**
-		Unmortgage a property.
-		*/
-		void unmortgageProperty(int index);
-
-		/**
-		Roll for the current players turn
-		*/
-		void rollTurn();
 		
+		Player* getPlayer(int index);
+		Property* getProperty(int index);
+				
 		/**
-		Card drawn
+		Current player manipulators
+		*/
+		void useGetOutOfJail();
+		void buyHouses(int index, int amount);
+		void sellHouses(int index, int amount);
+		void mortgageProperty(int index);
+		void unmortgageProperty(int index);
+		void rollTurn();
+				
+		/**
+		Notification functions
 		*/
 		void notifyCardDrawn(int type, int card);
-
-		/**
-		Propose trade.
-		*/
 		bool notifyProposeTrade(const Trade& trade, int player);
-
-    /**
-    Prompt a player to raise an amount of money to avoid bankruptcy.
-    */
     void notifyRaiseFunds(int amount);
-
-    /**
-    Offer a player a chance to buy a property.
-    */
     bool notifyOfferPurchase(int index);
-
-
-
-
-
-
+		
 	private:
 
     /**
@@ -137,19 +79,10 @@ namespace Monopoly
 		bool gameOver();
 
 		/**
-
+		Internal game notifications
 		*/
 		void notifyEndTurn();
-
-		/**
-
-		*/
 		void notifyStartTurn();
-
-
-		/**
-
-		*/
 		void notifyRoll(int die1, int die2);
 
 		/**
@@ -157,7 +90,6 @@ namespace Monopoly
 		*/
 		void updateTurn(bool inJail, bool rolledDouble); 
 		
-
     // Current player turn
 		int m_turn;
 
