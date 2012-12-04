@@ -1,4 +1,4 @@
-#include "player.hpp"
+#include "Player.hpp"
 #include <iostream>
 #include <string>
 
@@ -17,7 +17,7 @@ Monopoly::Player::Player(Game* game, string playerName)
   jailCards[1]=0;
   groups= new Group[10];
   numberGroups=0;
-  isBankrupt=false;
+  
 }
 
 /* accessors */
@@ -162,9 +162,9 @@ int *Monopoly::Player::return_all_cards()
   else return 0;
 }
 
-std::vector<int> Monopoly::Player::return_all_cards_in_group(int groupID)
+int *Monopoly::Player::return_all_cards_in_group(int groupID)
 {
-  int numProperties=0, property=0;
+  int *properties, numProperties=0, property=0;
   int maxNumberPropertiesInGroup=groups[groupID].get_number_properties();
   
   for(int i=0; i<maxNumberPropertiesInGroup; i++)
@@ -172,34 +172,52 @@ std::vector<int> Monopoly::Player::return_all_cards_in_group(int groupID)
     if(groups[groupID].get_property(i)!=0) numProperties++;
     else i=maxNumberPropertiesInGroup;
   }
-
-	std::vector<int> properties2;
   
+  properties=new int[numProperties];
+  numProperties=0;
   
   for(int i=0; i<maxNumberPropertiesInGroup; i++)
   {
     property=groups[groupID].get_property(i);
     if(property!=0) 
     {
-			properties2.push_back(property);;
+      properties[numProperties]=property;
+      numProperties++;
     }
     else i=maxNumberPropertiesInGroup;
   }
   
-  return properties2;
+  return properties;
 }
 
-
+/*TODO*/
+bool Monopoly::Player::is_bankrupt()
+{
+  return false;
+}
 
 /* mutators */
 /* takes dies product, it will change the current position of the player at returns that position */
 int Monopoly::Player::move(int dieProduct)
 {
+  int temp=position;
   position+=dieProduct;
   while(position>=40)
   {
     position-=40;
   }
+  if(position==30)
+  {
+    cout << "You go straight to jail. You will not cross GO and will not revieve £200"<<endl;
+    go_to_jail();
+  }
+  else if(temp > position)
+  {
+    money+=200;
+    cout << "You crossed GO and revieve £200"<<endl;
+  }
+  
+  
   return position;
 }
 
@@ -209,7 +227,7 @@ int Monopoly::Player::advance_to(int newPosition)
   int temp=position;
   position= newPosition;
   
-  if(temp>position)
+  if(temp>position || position==0)
   {
     money+=200;
     cout << "You crosses GO and revieve £200"<<endl;
@@ -260,10 +278,6 @@ int Monopoly::Player::get_money(int amount)
   return money;
 }
 
-bool Monopoly::Player::is_bankrupt()
-{
-	return isBankrupt;
-}
 
 /* removes the last jail card, if there is one. and puts it back in deck */
 int Monopoly::Player::use_jail_card(int index)

@@ -1,8 +1,6 @@
 //#include <string>
 //#include <iostream>
-#include "group.hpp"
-
-#include <vector>
+#include "Group.hpp"
 
 //using namespace std;
 namespace Monopoly 
@@ -27,7 +25,7 @@ int get_number_of_jail_cards();
 int check_number_full_groups();
 Group *return_all_full_groups();
 bool own_card(int card, int groupID);
-std::vector<int> return_all_cards_in_group(int groupID);
+int *return_all_cards_in_group(int groupID);
 int *return_all_cards();
 bool is_bankrupt();
 
