@@ -2,15 +2,19 @@
 //#include <iostream>
 #include "group.hpp"
 
+#include <vector>
+
 //using namespace std;
 namespace Monopoly 
 {
+  class Game;
+
 class Player
 {
   
 public:
 // constructor initialises the players name with string supplied as argument and a players piece with character also supplied s argument
-Player(std::string playerName);
+Player(Game* game, std::string playerName);
 
 /*accessors*/
 int get_position();
@@ -23,8 +27,9 @@ int get_number_of_jail_cards();
 int check_number_full_groups();
 Group *return_all_full_groups();
 bool own_card(int card, int groupID);
-int *return_all_cards_in_group(int groupID);
+std::vector<int> return_all_cards_in_group(int groupID);
 int *return_all_cards();
+bool is_bankrupt();
 
 /*mutators*/
 int move(int dieProduct); //takes dies product, it will change the current position of the player at returns that position
@@ -43,6 +48,8 @@ int remove_property(int property, int groupID); // returns property removed or 0
 int add_property(int property, int groupID, int groupSize); //returns property added or 0 if it could not be added
 
 private: 
+
+bool isBankrupt;
 std::string name;
 int position;
 int money;

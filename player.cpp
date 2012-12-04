@@ -5,7 +5,7 @@
 using namespace std;
 
 /* constructor initialises the players name with string supplied as argument and a players piece with character also supplied s argument */
-Monopoly::Player::Player(string playerName)
+Monopoly::Player::Player(Game* game, string playerName)
 {
   name=playerName;
   piece=0;
@@ -17,7 +17,7 @@ Monopoly::Player::Player(string playerName)
   jailCards[1]=0;
   groups= new Group[10];
   numberGroups=0;
-  
+  isBankrupt=false;
 }
 
 /* accessors */
@@ -162,9 +162,9 @@ int *Monopoly::Player::return_all_cards()
   else return 0;
 }
 
-int *Monopoly::Player::return_all_cards_in_group(int groupID)
+std::vector<int> Monopoly::Player::return_all_cards_in_group(int groupID)
 {
-  int *properties, numProperties=0, property=0;
+  int numProperties=0, property=0;
   int maxNumberPropertiesInGroup=groups[groupID].get_number_properties();
   
   for(int i=0; i<maxNumberPropertiesInGroup; i++)
@@ -172,22 +172,21 @@ int *Monopoly::Player::return_all_cards_in_group(int groupID)
     if(groups[groupID].get_property(i)!=0) numProperties++;
     else i=maxNumberPropertiesInGroup;
   }
+
+	std::vector<int> properties2;
   
-  properties=new int[numProperties];
-  numProperties=0;
   
   for(int i=0; i<maxNumberPropertiesInGroup; i++)
   {
     property=groups[groupID].get_property(i);
     if(property!=0) 
     {
-      properties[numProperties]=property;
-      numProperties++;
+			properties2.push_back(property);;
     }
     else i=maxNumberPropertiesInGroup;
   }
   
-  return properties;
+  return properties2;
 }
 
 
@@ -261,6 +260,10 @@ int Monopoly::Player::get_money(int amount)
   return money;
 }
 
+bool Monopoly::Player::is_bankrupt()
+{
+	return isBankrupt;
+}
 
 /* removes the last jail card, if there is one. and puts it back in deck */
 int Monopoly::Player::use_jail_card(int index)

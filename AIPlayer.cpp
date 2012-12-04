@@ -2,6 +2,7 @@
 
 #include "Game.hpp"
 #include "Player.hpp"
+#include "Property.hpp"
 #include "Trade.hpp"
 
 Monopoly::AIPlayer::AIPlayer(Game* game, int index)
@@ -17,6 +18,8 @@ Monopoly::AIPlayer::~AIPlayer()
 
 void Monopoly::AIPlayer::turnStart(int index)
 {
+	buyHouses();
+
   m_game->rollTurn();
 }
     
@@ -25,7 +28,7 @@ void Monopoly::AIPlayer::turnEnd(int index)
 
 }
     
-bool Monopoly::AIPlayer::acceptTrade(const Trade& trade)
+bool Monopoly::AIPlayer::acceptTrade(int player, const Trade& trade)
 {
   double before = computeUtility(m_money, m_owned);
   
@@ -39,17 +42,36 @@ bool Monopoly::AIPlayer::acceptTrade(const Trade& trade)
   return (after > before);
 }
    
-bool Monopoly::AIPlayer::buyProperty(int index)
+bool Monopoly::AIPlayer::buyProperty(int player, int index)
 {
   return considerProperty(index);
+}
+
+void Monopoly::AIPlayer::buyHouses()
+{
+	for (std::vector<Property*>::iterator it = m_owned.begin(); it != m_owned.end(); it++)
+	{
+		if (m_money > 400)
+			(*it)->buyHouse();
+	}
+}
+
+double Monopoly::AIPlayer::computeUtility(int money, const std::vector<Property*>& property)
+{
+	return 0;
 }
     
 bool Monopoly::AIPlayer::considerProperty(int index)
 {
-	return true;
+	int reserve = m_money - 400;
+
+	if (reserve > m_game->getProperty(index)->getPrice())
+		return true;
+	
+	return false;
 }
 
-void Monopoly::AIPlayer::raiseFunds(int amount)
+void Monopoly::AIPlayer::raiseFunds(int player, int amount)
 {
   int raised = 0;
 
@@ -65,4 +87,24 @@ void Monopoly::AIPlayer::raiseFunds(int amount)
   }
 
   // If we get here and raised < amount we are bankrupt
+}
+
+int Monopoly::AIPlayer::mortgageNextProperty()
+{
+	return 0;
+}
+
+bool Monopoly::AIPlayer::hasUnmortgaged()
+{
+	return false;
+}
+
+bool Monopoly::AIPlayer::hasHouses()
+{
+	return false;
+}
+
+int Monopoly::AIPlayer::sellNextHouse()
+{
+	return 0;
 }

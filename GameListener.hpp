@@ -9,11 +9,11 @@ namespace Monopoly
   {
   public:
 
-    virtual void turnStart(int index) = 0;
-    virtual void turnEnd(int index) = 0;
-    virtual bool acceptTrade(const Trade& trade) = 0;
-    virtual bool buyProperty(int index) = 0;
-    virtual void raiseFunds(int amount) = 0;
+    virtual void turnStart(int player) = 0;
+    virtual void turnEnd(int player) = 0;
+    virtual bool acceptTrade(int player, const Trade& trade) = 0;
+    virtual bool buyProperty(int player, int property) = 0;
+    virtual void raiseFunds(int player, int amount) = 0;
   };
 };
 

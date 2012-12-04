@@ -31,11 +31,13 @@ namespace Monopoly
     */
     void turnStart(int index);
     void turnEnd(int index);
-    bool acceptTrade(const Trade& trade);
-    bool buyProperty(int index);
-    void raiseFunds(int amount);
+    bool acceptTrade(int player, const Trade& trade);
+    bool buyProperty(int player, int property);
+    void raiseFunds(int player, int amount);
 
   private:
+
+		void buyHouses();
 
     int sellNextHouse();
     int mortgageNextProperty();
