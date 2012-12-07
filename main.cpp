@@ -1,8 +1,9 @@
 #include <iostream>
+#include<stdio.h>
 
 #include "Game.hpp"
 #include "GameListener.hpp"
-#include "player.hpp"
+#include "Player.hpp"
 
 /* Forward decleration */
 void init_players(Monopoly::Game& game, int numPlayers, char *argv[]);
@@ -11,9 +12,8 @@ struct Printer : public Monopoly::GameListener
 {	
 	virtual void turnStart(int index) 
 	{
-    printf("Player %d turn, position %d, money %d\n", index,  game->getPlayer(index)->get_position(), game->getPlayer(index)->get_money());
-
-		int b = game->getPlayer(index)->get_position();
+    printf("Player %d turn, position %d, money %d\n", index,  game->getPlayer(index)->getPosition(), game->getPlayer(index)->getMoney());
+    	int b = game->getPlayer(index)->getPosition();
 
 		int in = 1;
 		
@@ -22,13 +22,14 @@ struct Printer : public Monopoly::GameListener
 		
 		game->rollTurn();
 
-		int a = game->getPlayer(index)->get_position();
+		int a = game->getPlayer(index)->getPosition();
 
 	}
 
 	virtual void turnEnd(int index)
 	{
-    printf("Player %d turn end, position %d, money %d\n", index,  game->getPlayer(index)->get_position(), game->getPlayer(index)->get_money());
+    printf("Player %d turn end, position %d, money %d\n", index,  game->getPlayer(index)->getPosition(), game->getPlayer(index)->getMoney());
+
 	}
 
 	virtual void playerRolled(int player, int die1, int die2) 
@@ -41,9 +42,8 @@ struct Printer : public Monopoly::GameListener
 	{
 		printf("Landed on property %d\n", index);
 
-
 		int in = 1;
-
+	      
 		printf("Press zero to buy:");
 		scanf("%d", &in);
 

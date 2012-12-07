@@ -41,14 +41,14 @@ void Monopoly::Property::action(int player, int roll)
   if (!m_owned)
   {
 		// If a player has enough money offer the chance to buy
-		if (m_game->getPlayer(player)->get_money() > m_buyPrice)
+		if (m_game->getPlayer(player)->getMoney() > m_buyPrice)
 		{
 			bool buy = m_game->notifyOfferPurchase(m_index);
 
 			if (buy)
 			{
-				m_game->getPlayer(player)->add_property(m_index, m_group, m_groupSize);
-				m_game->getPlayer(player)->pay_money(m_buyPrice);
+				m_game->getPlayer(player)->addProperty(m_index, m_group, m_groupSize);
+				m_game->getPlayer(player)->payMoney(m_buyPrice);
     
 				m_owned = true;
 				m_owner = m_game->getPlayer(player);
@@ -77,7 +77,7 @@ void Monopoly::Property::buyHouse()
 	assert(m_propertyType == 1);
 	assert(m_houses < 5);
 
-	std::vector<int> streets = m_owner->return_all_cards_in_group(m_group);	
+	std::vector<int> streets = m_owner->getAllCardsInGroup(m_group);	
 
 	bool canBuy = streets.size() == m_group;
 
@@ -93,7 +93,7 @@ void Monopoly::Property::buyHouse()
 
 	if (canBuy)
 	{
-		m_owner->pay_money(m_housePrice);
+		m_owner->payMoney(m_housePrice);
 		m_houses++;
 	}
 }
@@ -120,15 +120,15 @@ int Monopoly::Property::getType()
 
 void Monopoly::Property::payRentRailway(int player)
 {
-	std::vector<int> railways = m_owner->return_all_cards_in_group(m_group);
+	std::vector<int> railways = m_owner->getAllCardsInGroup(m_group);
 	
-	m_game->getPlayer(player)->pay_money(m_rentBands[railways.size() - 1]);
-	m_owner->get_money(m_rentBands[railways.size() - 1]);
+	m_game->getPlayer(player)->payMoney(m_rentBands[railways.size() - 1]);
+	m_owner->getMoney(m_rentBands[railways.size() - 1]);
 }
 
 void Monopoly::Property::payRentStreet(int player)
 {
-	std::vector<int> streets = m_owner->return_all_cards_in_group(m_group);
+	std::vector<int> streets = m_owner->getAllCardsInGroup(m_group);
 
 	if (streets.size() == m_groupSize)
 	{
@@ -139,22 +139,22 @@ void Monopoly::Property::payRentStreet(int player)
 			rent *= 2;
 		}
 
-		m_game->getPlayer(player)->pay_money(rent);
-		m_owner->get_money(rent);	
+		m_game->getPlayer(player)->payMoney(rent);
+		m_owner->getMoney(rent);	
 	}
 	else
 	{
-		m_game->getPlayer(player)->pay_money(m_rentBands[0]);
-		m_owner->get_money(m_rentBands[0]);	
+		m_game->getPlayer(player)->payMoney(m_rentBands[0]);
+		m_owner->getMoney(m_rentBands[0]);	
 	}
 }
 
 void Monopoly::Property::payRentUtility(int player, int roll)
 {
-	std::vector<int> utilities = m_owner->return_all_cards_in_group(m_group);
+	std::vector<int> utilities = m_owner->getAllCardsInGroup(m_group);
 	
-	m_game->getPlayer(player)->pay_money(m_rentBands[utilities.size() - 1] * roll);
-	m_owner->get_money(m_rentBands[utilities.size() - 1] * roll);
+	m_game->getPlayer(player)->payMoney(m_rentBands[utilities.size() - 1] * roll);
+	m_owner->getMoney(m_rentBands[utilities.size() - 1] * roll);
 }
 
 void Monopoly::Property::sellHouse()
@@ -162,7 +162,7 @@ void Monopoly::Property::sellHouse()
 	assert(m_propertyType == 1);
 	assert(m_houses > 0);
 
-	std::vector<int> streets = m_owner->return_all_cards_in_group(m_group);	
+	std::vector<int> streets = m_owner->getAllCardsInGroup(m_group);	
 
 	bool canSell = streets.size() == m_group;
 
@@ -178,7 +178,7 @@ void Monopoly::Property::sellHouse()
 
 	if (canSell)
 	{
-		m_owner->get_money(m_housePrice / 2);
+		m_owner->getMoney(m_housePrice / 2);
 		m_houses--;
 	}
 }

@@ -1,86 +1,134 @@
 #include <iostream>
-#include "group.hpp"
+#include "Group.hpp"
 
 // constructor initialises the players name with string supplied as argument and a players piece with character also supplied s argument
-Group::Group(int groupID, int groupSize)
+Group::Group(int groupID, int size)
 {
-  id=groupID;
-  numberProperties= groupSize;
-  properties= new int[4];  
+  int i;
+  
+  m_id=groupID;
+  m_groupSize = size;  
+  m_numberProperties=0; 
+  m_properties.resize(m_groupSize);
+  
+  for( i=0; i< m_groupSize; i++)
+  {
+    m_properties[i]=0;
+  }
 }
 
 Group::Group()
 {
-  id=0;
-  numberProperties= 0;
-  properties= new int[4]; 
+  m_id=0;
+  m_groupSize = 1;  
+  m_numberProperties= 0;
+  m_properties.push_back(0);
+}
+
+Group::~Group()
+{
+  m_properties.clear();
 }
 
 
 /*accessors*/
-int Group::get_id()
+int Group::getID()
 {
-  return id;
+  return m_id;
 }
 
-int Group::get_number_properties()
+int Group::getNumberProperties()
 {
-  return numberProperties;
+  return m_numberProperties;
 }
 
-
-int *Group::get_properties()
+int Group::getGroupSize()
 {
-  return properties;
+  return m_groupSize;
 }
 
-int Group::get_property(int index)
+std::vector<int> Group::getProperties()
 {
-  return properties[index];
-}
-
-bool Group::is_group_full()
-{
-  for(int i=0; i<numberProperties; i++)
+  std::vector<int> temp;
+  int i;
+  
+  for( i=0; i < m_numberProperties; i++)
   {
-    if(properties[i]==0) return false;
+    temp.push_back(m_properties[i]);
   }
-  return true;
+  return temp;
+}
+
+int Group::getProperty(int index)
+{
+  return m_properties[index];
+}
+
+bool Group::isGroupFull()
+{
+  if( m_numberProperties == m_groupSize ) return true;
+  else return false;
+}
+
+bool Group::hasCard(int index)
+{
+  int i;
+  
+  for( i=0; i< m_numberProperties; i++)
+  {
+    if( m_properties[i] == index) return true;
+  }
+  
+  return false;
 }
 
 /*mutators*/
-int Group::add_property_to_list(int card)
+int Group::addPropertyToList(int propertyIndex)
 {
-  for(int i=0; i<numberProperties; i++)
-  {
-    if(properties[i]==0)
-    {
-      properties[i]=card; 
-      return card;
-    }
-  }
-  return 0;
+  if( isGroupFull() ) return 0;
+  
+  m_properties[m_numberProperties] = propertyIndex;
+  m_numberProperties++;
+  return propertyIndex;
 }
 
-int Group::delete_property(int card)
+
+int Group::deleteProperty(int propertyIndex)
 {
-  for(int i=0; i<numberProperties; i++)
+  int i;
+  int position = -1;
+  
+  for( i=0; i < m_numberProperties; i++)
   {
-    if(properties[i]==card)
+    if(m_properties[i]==propertyIndex)
     {
-      for(int j=i; j<numberProperties-1; i++)
-      {
-	properties[j]=j+1; 
-      }
-        properties[numberProperties-1]=0;
-	return card;
+      position=i;
+      break;
     }
   }
-  return 0;
+  if(position==-1) return 0;
+  
+  for( i= position; i < m_numberProperties -1; i++)
+  {
+    m_properties[i]=m_properties[i+1];
+  }
+  m_numberProperties--;
+  m_properties[m_numberProperties] = 0;
+  
+  return propertyIndex;
 }
 
-void Group::reinit_group(int groupID, int groupSize)
+void Group::reinitGroup(int groupID, int size)
 {
-  id=groupID;
-  numberProperties= groupSize; 
+  int i;
+  
+  m_id=groupID;
+  m_groupSize = size;  
+  m_numberProperties=0; 
+  m_properties.resize(m_groupSize);
+  
+  for( i=0; i< m_groupSize; i++)
+  {
+    m_properties[i]=0;
+  }
 }

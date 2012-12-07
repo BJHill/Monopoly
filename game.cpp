@@ -13,10 +13,8 @@
 Monopoly::Game::Game()
 {
 	srand((unsigned int)time(NULL));
-
   m_doubles = 0;
 	m_turn = 0;
-
   m_chanceCard = 0;
   m_communuityCard = 0;
 
@@ -43,9 +41,9 @@ Monopoly::Game::~Game()
 
 void Monopoly::Game::constructBoard()
 {
+  
   m_chanceCard = new CardDeck(this, "chance.deck");
   m_communuityCard = new CardDeck(this, "community.deck");
-
 
 	// This would be better as a file
   m_board.push_back(new Square(this, 0, "Go"));
@@ -89,6 +87,7 @@ void Monopoly::Game::constructBoard()
   m_board.push_back(new Square(this, 100, "Super Tax"));
   m_board.push_back(new Property(this,39,1,10,2,"Mayfair"));
 
+  
 	((Property*)m_board[1])->setPrice(60,50);
 	((Property*)m_board[3])->setPrice(60,50);
 	((Property*)m_board[5])->setPrice(200,0);
@@ -117,7 +116,7 @@ void Monopoly::Game::constructBoard()
 	((Property*)m_board[35])->setPrice(200,0);
 	((Property*)m_board[37])->setPrice(350,200);
 	((Property*)m_board[39])->setPrice(400,200);
-
+	
 	((Property*)m_board[1])->setRent(2,10,30,90,160,250);
 	((Property*)m_board[3])->setRent(4,20,60,180,320,450);
 	((Property*)m_board[5])->setRent(25,50,100,200,0,0);
@@ -146,6 +145,7 @@ void Monopoly::Game::constructBoard()
 	((Property*)m_board[35])->setRent(25,50,100,200,0,0);
 	((Property*)m_board[37])->setRent(35,175,500,1100,1300,1500);
 	((Property*)m_board[39])->setRent(50,200,600,1400,1700,2000);
+
 }
 
 void Monopoly::Game::registerUIListener(GameListener* listener)
@@ -185,7 +185,7 @@ bool Monopoly::Game::gameOver()
 
 	for (std::vector<Player*>::iterator it = m_players.begin(); it != m_players.end(); ++it)
 	{
-		if (!(*it)->is_bankrupt())
+		if (!(*it)->isBankrupt())
 		{
 			notBankrupt++;
 		}
@@ -256,7 +256,7 @@ void Monopoly::Game::unmortgageProperty(int index)
 
 void Monopoly::Game::useGetOutOfJail()
 {
-	int deck = m_players[m_turn]->use_jail_card(0);
+	int deck = m_players[m_turn]->useJailCard(0);
 
 	if (deck == 1)
 	{
@@ -276,15 +276,15 @@ void Monopoly::Game::rollTurn()
 	Player* player = m_players[m_turn];
 
   int currentPlayer = m_turn;
-  int currentLocation = player->get_position();
+  int currentLocation = player->getPosition();
 
-	bool inJail = player->in_jail();
+	bool inJail = player->isInJail();
 		
 	notifyRoll(die1, die2);
 	
   if (die1 == die2 && m_doubles == 2)
   {
-    player->go_to_jail();
+    player->goToJail();
     m_doubles = 0;
   }
 	else
@@ -294,20 +294,20 @@ void Monopoly::Game::rollTurn()
 		{
 			if (die1 == die2)
 			{
-				player->free_from_jail();
+				player->freeFromJail();
 				player->move(die1 + die2);
 			}
 			else
 			{
-				if (player->get_rounds_in_jail() == 2)
+				if (player->getRoundsInJail() == 2)
 				{
-					player->pay_money(50);
-					player->free_from_jail();
+					player->payMoney(50);
+					player->freeFromJail();
 					player->move(die1 + die2);
 				}
 				else
 				{
-					player->increase_round_in_jail();
+					player->increaseRoundInJail();
 				}
 			}
 		}
@@ -318,12 +318,12 @@ void Monopoly::Game::rollTurn()
 	}
   	
   // Call action for square landed on
-  m_board[player->get_position()]->action(currentPlayer, die1 + die2);
+  m_board[player->getPosition()]->action(currentPlayer, die1 + die2);
 		
   // Notify end of turn
 	notifyEndTurn();
 	
-	updateTurn(inJail || player->in_jail(), die1 == die2);
+	updateTurn(inJail || player->isInJail(), die1 == die2);
 }
 
 void Monopoly::Game::updateTurn(bool inJail, bool rolledDouble)

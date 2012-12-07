@@ -30,6 +30,6 @@ void Monopoly::CardSquare::action(int player, int roll)
 
 	if (jail)
 	{
-		m_game->getPlayer(player)->keep_card(m_type);
+		m_game->getPlayer(player)->keepCard(m_type);
 	}
 }

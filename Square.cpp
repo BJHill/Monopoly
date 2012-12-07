@@ -17,5 +17,5 @@ Monopoly::Square::~Square()
 
 void Monopoly::Square::action(int player, int roll)
 {
-  m_game->getPlayer(player)->pay_money(m_amount);
+  m_game->getPlayer(player)->payMoney(m_amount);
 }
